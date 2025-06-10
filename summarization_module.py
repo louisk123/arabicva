@@ -16,7 +16,7 @@ def load_model_components():
         device=0 if torch.cuda.is_available() else -1
     )
 
-def summarize_arabic_text(text):
+def perform_summarization_logic(text):
     try:
         summarizer = load_model_components()
         result = summarizer(
