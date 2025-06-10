@@ -6,6 +6,9 @@ from dialect_module import perform_dialect_detection_logic
 from summarization_module import perform_summarization_logic
 from lebanon_qa_module import answer_qa_lebanon
 from rag_module import retrieve, answer_question, collection
+import sys
+st.write("Python version:", sys.version)
+
 
 # Place this function at the very top, before st.set_page_config
 def clear_input_fields(exclude_key=None):
