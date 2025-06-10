@@ -8,17 +8,19 @@ model_name = "malmarjeh/t5-arabic-text-summarization"
 @st.cache_resource
 def load_summarization_model():
     try:
-        # Load preprocessor with a valid AraBERT model
-        preprocessor = ArabertPreprocessor(model_name="aubmindlab/bert-base-arabertv02")
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        # Initialize preprocessor first
+        preprocessor = ArabertPreprocessor(model_name=arabert_preprocessor_model_name)
+
+        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+
         model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-        # Use 'cpu' if MPS is not available or preferred
         device = 0 if torch.cuda.is_available() else -1
         summarizer_pipeline = pipeline("text2text-generation", model=model, tokenizer=tokenizer, device=device)
         return preprocessor, summarizer_pipeline, tokenizer
     except Exception as e:
-        st.error(f"Failed to load summarization model: {e}.")
+        st.error(f"Failed to load summarization model: {e}. Ensure all dependencies are correct and the model is accessible.")
         return None, None, None
+
 
 preprocessor, summarizer_pipeline, tokenizer = load_summarization_model()
 
