@@ -10,37 +10,25 @@ from deep_translator import GoogleTranslator
 # using @st.cache_resource, so they only load once.
 
 @st.cache_resource
-def get_google_translator_instance():
-    """
-    Initializes and caches the GoogleTranslator instance.
-    This function should only be called once across the app's lifetime.
-    """
-    return GoogleTranslator()
+def get_google_translator_instance(source,target):
+    return GoogleTranslator(source,target)
 
 # Helper function to detect if text is Arabic or English
-def _is_arabic(text: str) -> bool:
-    """
-    Checks if the given text contains Arabic characters.
-    """
+def is_arabic(text: str) -> bool:
     return bool(re.search(r'[\u0600-\u06FF]', text))
 
 def perform_translation_logic(text_to_translate: str) -> str:
-    """
-    Performs translation of the given text, detecting source language automatically.
-    """
     translator = get_google_translator_instance() # Get the cached translator instance
 
     # Detect language using the local helper function and use text_to_translate
-    if _is_arabic(text_to_translate):
-        source_lang = 'ar'
-        target_lang = 'en'
+    if is_arabic(text_to_translate):
+        translator = get_google_translator_instance('ar','en') # Get the cached translator instance
     else:
-        source_lang = 'en'
-        target_lang = 'ar'
+        translator = get_google_translator_instance('en','ar') # Get the cached translator instance
 
     try:
-        # Perform translation using the cached translator instance's translate method
-        translation_result = translator.translate(text_to_translate, source=source_lang, target=target_lang)
+        # Perform translation
+        translation_result = translator.translate(text)
         return translation_result
     except Exception as e:
         return f"❌ حدث خطأ أثناء الترجمة: {e}"
