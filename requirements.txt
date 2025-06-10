@@ -9,4 +9,4 @@ langchain
 google-generativeai
 transformers>=4.34.0
 torch>=2.0.0
-arabert-preprocess
+arabert
