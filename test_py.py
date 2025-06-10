@@ -17,7 +17,7 @@ def clear_input_fields(exclude_key=None):
         'sentiment_input_text',
         'dialect_input_text',
         'summarization_input_text',
-        'lebanon_qa_input_text';
+        'lebanon_qa_input_text'
     ]
     for key in input_keys_to_clear:
         if key != exclude_key and key in st.session_state:
