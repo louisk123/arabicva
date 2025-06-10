@@ -31,6 +31,7 @@ def summarize_text(text, max_new_tokens=150, min_length=30):
 
 # Remove fixed_max_new_tokens and fixed_min_length from function signature
 def perform_summarization_logic(text):
+    try:
         summary_result = summarize_text(text)
         return summary_result
     except Exception as e:
