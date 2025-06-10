@@ -5,7 +5,7 @@ import os
 
 # Configuration
 hf_token = os.environ.get("HF_TOKEN")
-model_name = "UBC-NLP/AraT5-base-title-generation"  # Alternative model
+model_name = "UBC-NLP/AraT5-base-title-generation"  
 
 try:
     # Initialize with slow tokenizer
@@ -32,7 +32,7 @@ except Exception as e:
     st.error(f"Model loading failed: {str(e)}")
     st.stop()
 
-def summarize_text(text):
+def perform_summarization_logic(text):
     try:
         processed_text = preprocessor.preprocess(text)
         output = summarizer(
