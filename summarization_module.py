@@ -2,36 +2,48 @@ import streamlit as st
 from transformers import pipeline
 from arabert.preprocess import ArabertPreprocessor
 
-# 1. Use a compatible model that doesn't require SentencePiece
-MODEL_NAME = "aubmindlab/aragpt2-base"  # Alternative Arabic model
+# Configuration - Using smaller model for stability
+MODEL_NAME = "aubmindlab/aragpt2-base"
 
+# Cache the preprocessor separately
 @st.cache_resource
-def load_components():
-    # 2. Initialize components
-    preprocessor = ArabertPreprocessor(model_name="aubmindlab/bert-base-arabertv02")
-    
-    # 3. Load model (simplified pipeline)
-    summarizer = pipeline(
-        "text-generation",  # Changed from text2text-generation
-        model=MODEL_NAME,
-        device="cpu"
-    )
-    return preprocessor, summarizer
+def load_preprocessor():
+    return ArabertPreprocessor(model_name="aubmindlab/bert-base-arabertv02")
+
+# Cache the model with explicit reload handling
+@st.cache_resource(show_spinner=False)
+def load_summarizer():
+    try:
+        return pipeline(
+            "text-generation",
+            model=MODEL_NAME,
+            device="cpu",
+            torch_dtype="auto"  # Better memory management
+        )
+    except Exception as e:
+        st.error(f"Model loading failed: {str(e)}")
+        st.stop()  # Halt app if model fails to load
 
 def perform_summarization_logic(text):
-    try:
-        preprocessor, summarizer = load_components()
-        processed_text = preprocessor.preprocess(text)
+    if not text.strip():
+        return None
         
-        # Adjusted parameters for GPT-style model
+    try:
+        # Load cached components
+        preprocessor = load_preprocessor()
+        summarizer = load_summarizer()
+        
+        # Process and summarize
+        processed_text = preprocessor.preprocess(text)
         output = summarizer(
             processed_text,
-            max_new_tokens=100,  # Reduced length for GPT
-            num_beams=3,
-            no_repeat_ngram_size=2
+            max_new_tokens=80,  # Reduced further for stability
+            num_beams=2,  # Fewer beams for less memory
+            early_stopping=True,
+            no_repeat_ngram_size=2,
+            temperature=0.7  # More predictable outputs
         )
         return output[0]['generated_text']
     except Exception as e:
-        st.error(f"Error: {str(e)}")
+        st.error(f"Summarization error: {str(e)}")
         return None
-
