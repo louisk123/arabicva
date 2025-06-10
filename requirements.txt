@@ -10,4 +10,4 @@ chromadb
 langchain
 google-generativeai
 arabert
-sentencepiece
+sentencepiece==0.1.99
