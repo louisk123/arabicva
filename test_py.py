@@ -27,19 +27,17 @@ col_main1, col_main2 ,col_main3 = st.columns(3)
 
 def clear_input_fields(exclude_key=None):
     """
-    Clears all input-related session state variables except the one specified.
+    Clears all input-related session state.
     """
     input_keys_to_clear = [
         'translation_input_text',
         'sentiment_input_text',
         'dialect_input_text'
-        # Add any other input keys here as you expand your app
     ]
     for key in input_keys_to_clear:
         if key != exclude_key and key in st.session_state:
             st.session_state[key] = ""
 
-# --- Now, in your button logic, you'd call it like this: ---
 
 with col_main1:
     if st.button("وضع الترجمة 🌍", key="mode_translation_button"):
@@ -88,7 +86,7 @@ elif st.session_state.current_mode == "المشاعر":
         else:
             st.warning("الرجاء إدخال نص لتحليل المشاعر.")
 
-elif st.session_state.current_mode == "اللهجة": # New mode for dialect detection
+elif st.session_state.current_mode == "اللهجة":
     st.header("اكتشاف اللهجة العربية 🗣️")
     st.markdown("أدخل جملة عربية لاكتشاف لهجتها.")
 
@@ -105,7 +103,7 @@ elif st.session_state.current_mode == "اللهجة": # New mode for dialect det
         else:
             st.warning("الرجاء إدخال نص لاكتشاف اللهجة.")
 
-else: # Initial state or after a refresh if no mode is explicitly selected yet
+else: 
     st.info("الرجاء النقر على أحد الأزرار الرئيسية أعلاه للبدء.")
 
 
