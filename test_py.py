@@ -103,7 +103,7 @@ elif st.session_state.current_mode == "اللهجة":
                 if isinstance(dialect, str) and ("خطأ" in dialect or "تعذر الكشف عن اللغة" in dialect or "النص ليس باللغة العربية" in dialect):
                     st.error(dialect)
                 else:
-                    st.success(f"**:اللهجة المتوقعة:** {dialect} (الاحتمالية: {confidence:.2%})")
+                    st.success(f"**:اللهجة المتوقعة:**\n\n {dialect}")
         else:
             st.warning("الرجاء إدخال نص لاكتشاف اللهجة.")
 
