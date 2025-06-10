@@ -20,7 +20,7 @@ def load_dialect_model():
         classifier = pipeline("text-classification", model=model, tokenizer=tokenizer, device=device)
         return classifier
     except Exception as e:
-        st.error(f"Failed to load dialect model: {e}. Please ensure you have an active internet connection and necessary libraries are installed.")
+        st.error(f"Failed to load dialect model: {e}.")
         return None
 
 classifier = load_dialect_model()
