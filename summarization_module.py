@@ -1,10 +1,12 @@
+
 import streamlit as st
 import requests
+import os
 
-# 🔐 Replace with your Hugging Face token
+HF_TOKEN = os.environ.get("HF_TOKEN")  # Load token from environment
+
 API_URL = "https://api-inference.huggingface.co/models/csebuetnlp/mT5_multilingual_XLSum"
-HF_TOKEN = "Bearer YOUR_HUGGINGFACE_API_TOKEN"
-HEADERS = {"Authorization": HF_TOKEN}
+HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"}
 
 def perform_summarization_logic(text):
     payload = {"inputs": text}
