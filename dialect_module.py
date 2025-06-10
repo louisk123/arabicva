@@ -27,13 +27,13 @@ classifier = load_dialect_model()
 
 # Map model output labels to human-readable dialect names
 label_map = {
-    "LABEL_0": "Egypt",
-    "LABEL_1": "Iraq",
-    "LABEL_2": "Lebanon",
-    "LABEL_3": "Morocco",
-    "LABEL_4": "Saudi Arabia",
-    "LABEL_5": "Sudan",
-    "LABEL_6": "Tunisia"
+    "LABEL_0": "مصر",
+    "LABEL_1": "العراق",
+    "LABEL_2": "لبنان",
+    "LABEL_3": "المغرب",
+    "LABEL_4": "المملكة العربية السعودية",
+    "LABEL_5": "السودان",
+    "LABEL_6": "تونس"
 }
 
 def perform_dialect_detection_logic(text):
