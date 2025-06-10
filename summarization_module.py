@@ -1,26 +1,26 @@
 import streamlit as st
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+from transformers import pipeline
 from arabert.preprocess import ArabertPreprocessor
 
-# Use a compatible model
-model_name = "UBC-NLP/AraT5-base-summarization"  
+# CORRECT Arabic T5 model (public, no auth needed)
+MODEL_NAME = "UBC-NLP/AraT5-base-title-generation"  
 
-try:
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+@st.cache_resource  # Cache model for performance
+def load_model():
     preprocessor = ArabertPreprocessor(model_name="aubmindlab/bert-base-arabertv02")
-    
     summarizer = pipeline(
         "text2text-generation",
-        model=model,
-        tokenizer=tokenizer,
-        device="cpu"  # Ensures compatibility
+        model=MODEL_NAME,
+        device="cpu"
     )
-except Exception as e:
-    st.error(f"Failed to load model: {str(e)}")
-    st.stop()
+    return preprocessor, summarizer
 
-def summarize(text):
+def perform_summarization_logic(text):
+    preprocessor, summarizer = load_model()
     processed_text = preprocessor.preprocess(text)
-    output = summarizer(processed_text, max_length=150, min_length=30)
-    return output[0]['generated_text']
+    return summarizer(
+        processed_text,
+        max_length=150,
+        min_length=30,
+        num_beams=3
+    )[0]['generated_text']
