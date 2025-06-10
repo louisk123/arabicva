@@ -13,7 +13,7 @@ model_name = "malmarjeh/t5-arabic-text-summarization"
 
 try:
     # Initialize preprocessor
-    preprocessor = ArabertPreprocessor(model_name="aubmindlab/bert-base-arabertv02")
+    preprocessor = ArabertPreprocessor(model_name="UBC-NLP/AraT5-base-title-generation")
     
     # Load tokenizer and model with auth token
     tokenizer = AutoTokenizer.from_pretrained(model_name, use_auth_token=hf_token)
