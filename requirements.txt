@@ -3,8 +3,10 @@ deep-translator
 sentence-transformers
 langdetect
 transformers
+peft
 torch
 pymupdf
+sentencepiece
 chromadb
 langchain
 google-generativeai
