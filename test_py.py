@@ -102,7 +102,7 @@ elif st.session_state.current_mode == "اللهجة":
                 if "Error" in dialect: # Check for specific error message from the dialect module
                     st.error(dialect)
                 else:
-                    st.success(f"**:اللهجة المتوقعة:** {dialect} (الاحتمالية: {confidence:.2%})")
+                    st.success(f"**:اللهجة المتوقعة:**\n\n {dialect}")
         else:
             st.warning("الرجاء إدخال نص لاكتشاف اللهجة.")
 
