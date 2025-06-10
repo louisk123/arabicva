@@ -9,10 +9,7 @@ adapter_name = "Hamma-16/HammaLoRAMarBert"
 
 @st.cache_resource
 def load_dialect_model():
-    """
-    Loads the tokenizer and the MARBERT model with the LoRA adapter for dialect detection.
-    This function is cached to prevent reloading the model on every rerun.
-    """
+
     try:
         tokenizer = AutoTokenizer.from_pretrained(base_model_name)
         model = AutoModelForSequenceClassification.from_pretrained(base_model_name, num_labels=7)
@@ -40,10 +37,6 @@ label_map = {
 }
 
 def perform_dialect_detection_logic(text):
-    """
-    Performs dialect detection on the given text using the loaded model.
-    Returns the predicted dialect and its confidence score.
-    """
     if classifier is None:
         return "Model not loaded.", 0.0
 
