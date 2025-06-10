@@ -1,4 +1,3 @@
-git+https://github.com/huggingface/transformers.git
 streamlit
 deep-translator
 sentence-transformers
@@ -11,3 +10,4 @@ chromadb
 langchain
 google-generativeai
 arabert
+sentencepiece
