@@ -43,7 +43,7 @@ def perform_dialect_detection_logic(text):
     try:
         result = classifier(text)[0]
         dialect_label = label_map.get(result["label"], result["label"])
-        confidence = result["score"]
-        return dialect_label, confidence
+        #confidence = result["score"]
+        return dialect_label
     except Exception as e:
         return f"Error during dialect detection: {e}", 0.0
