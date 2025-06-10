@@ -1,4 +1,5 @@
 streamlit
+deep-translator
 sentence-transformers
 pymupdf
 chromadb
