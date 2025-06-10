@@ -9,3 +9,4 @@ pymupdf
 chromadb
 langchain
 google-generativeai
+arabert
