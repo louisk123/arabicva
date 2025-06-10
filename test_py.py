@@ -1,7 +1,6 @@
 # streamlit_app.py
 
 import streamlit as st
-# Import your translation function from the new module
 from translation_module import perform_translation_logic 
 
 # --- 1. Set Page Configuration ---
@@ -15,14 +14,13 @@ st.set_page_config(
 st.title("مساعد اللغة العربية 🤖")
 st.markdown("اختر وظيفة من القائمة الجانبية.")
 
-# Use a selectbox in the sidebar for main navigation
 selected_function = st.sidebar.selectbox(
     "اختر الوظيفة:",
     ("التحية", "الترجمة"),
     index=0
 )
 
-# --- 3. Functionality Sections Based on User Selection ---
+# --- 3. Functionality ---
 
 if selected_function == "التحية":
     st.header("التحية 👋")
