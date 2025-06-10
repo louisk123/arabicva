@@ -1,4 +1,3 @@
-import chromadb
-print("chromadb imported successfully")
-
+import streamlit as st
+st.write("Python version:", sys.version)
 
