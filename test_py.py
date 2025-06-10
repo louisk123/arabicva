@@ -4,6 +4,8 @@ from translation_module import perform_translation_logic
 from sentiment_module import perform_sentiment_analysis_logic
 from dialect_module import perform_dialect_detection_logic
 from summarization_module import perform_summarization_logic
+from lebanon_qa_module import answer_qa_lebanon
+from rag_module import retrieve, answer_question, collection
 
 # Place this function at the very top, before st.set_page_config
 def clear_input_fields(exclude_key=None):
@@ -14,7 +16,8 @@ def clear_input_fields(exclude_key=None):
         'translation_input_text',
         'sentiment_input_text',
         'dialect_input_text',
-        'summarization_input_text'
+        'summarization_input_text,
+        "lebanon_qa_input_text";
     ]
     for key in input_keys_to_clear:
         if key != exclude_key and key in st.session_state:
@@ -36,8 +39,13 @@ if 'current_mode' not in st.session_state:
     st.session_state.current_mode = None
 
 # Create main buttons for mode selection
-col_main1, col_main2, col_main3, col_main4 = st.columns(4)
+col_main5, col_main1, col_main2, col_main3, col_main4 = st.columns(45
 
+                                                                   
+with col_maint:
+    if st.button("وضع الترجمة 🌍", key="mode_lebanon_qa_button"):
+        st.session_state.current_mode = "لبنان"
+        clear_input_fields(exclude_key='lebanon_qa_input_text')
 with col_main1:
     if st.button("وضع الترجمة 🌍", key="mode_translation_button"):
         st.session_state.current_mode = "الترجمة"
@@ -135,6 +143,23 @@ elif st.session_state.current_mode == "التلخيص":
                         st.success(f"**:الملخص:**\n\n{summary_result}")
         else:
             st.warning("الرجاء إدخال نص للتلخيص.")
+            
+elif st.session_state.current_mode == "لبنان":
+    st.header("اسأل عن لبنان 🇱🇧")
+    st.markdown("اكتب سؤالك هنا، وسأجيب عليه بناءً على قاعدة البيانات الخاصة بلبنان.")
+
+    question_text = st.text_area("سؤالك:", height=150, key="lebanon_qa_input")
+
+    if st.button("اسأل", key="ask_lebanon_button"):
+        if question_text and len(question_text.strip()) > 5:
+            with st.spinner("جاري البحث..."):
+                retrieved_chunks = retrieve(question_text, collection)
+                context = "\n".join(retrieved_chunks)
+                answer = answer_qa_lebanon(question_text, context)
+                st.markdown("### الإجابة:")
+                st.success(answer)
+        else:
+            st.warning("من فضلك أدخل سؤالًا واضحًا.")
 
 else:
     st.info("الرجاء النقر على أحد الأزرار الرئيسية أعلاه للبدء.")
