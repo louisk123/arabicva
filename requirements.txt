@@ -10,3 +10,4 @@ google-generativeai
 transformers
 torch
 arabert
+sentencepiece==0.1.99
