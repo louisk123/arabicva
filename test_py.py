@@ -1,40 +1,64 @@
-import streamlit as st
+# streamlit_app.py
 
-# --- 1. Set Page Configuration (Optional, but good practice) ---
+import streamlit as st
+# Import your translation function from the new module
+from translation_module import perform_translation_logic 
+
+# --- 1. Set Page Configuration ---
 st.set_page_config(
-    page_title="مساعد التحية البسيط", # Page title in browser tab
-    page_icon="👋",                  # Favicon
-    layout="centered"                # Page layout
+    page_title="مساعد متعدد الوظائف",
+    page_icon="🤖",
+    layout="centered"
 )
 
-# --- 2. Display the App Title and Introduction ---
-st.title("مساعد التحية البسيط 👋")
-st.markdown("اختر تحية وسأرد عليها.")
+# --- 2. Display App Title and Main Navigation ---
+st.title("مساعد اللغة العربية 🤖")
+st.markdown("اختر وظيفة من القائمة الجانبية.")
 
-# --- 3. Create Options for the User as Buttons ---
-# We'll use st.button() for each greeting.
-# The button returns True when clicked, so we check that.
+# Use a selectbox in the sidebar for main navigation
+selected_function = st.sidebar.selectbox(
+    "اختر الوظيفة:",
+    ("التحية", "الترجمة"),
+    index=0
+)
 
-# Initialize a variable to hold the response message
-response_message = ""
+# --- 3. Functionality Sections Based on User Selection ---
 
-col1, col2 = st.columns(2) # Create two columns for buttons
+if selected_function == "التحية":
+    st.header("التحية 👋")
+    st.markdown("اختر تحية وسأرد عليها.")
 
-with col1:
-    if st.button("قل مرحباً", key="say_hi_button"):
-        response_message = "مرحباً!"
+    greeting_response_message = ""
+    col1, col2 = st.columns(2)
 
-with col2:
-    if st.button("قل أهلاً", key="say_hello_button"):
-        response_message = "أهلاً بك!"
+    with col1:
+        if st.button("قل مرحباً", key="say_hi_button"):
+            greeting_response_message = "مرحباً!"
 
-# --- 4. Logic to Respond Based on Button Clicks ---
-# Display the response if a button was clicked
-if response_message:
-    st.write(response_message)
-else:
-    st.info("الرجاء اختيار تحية من الأزرار أعلاه.") # Provide a hint if no button clicked yet
+    with col2:
+        if st.button("قل أهلاً", key="say_hello_button"):
+            greeting_response_message = "أهلاً بك!"
 
-# --- Optional: Add a footer or other elements ---
+    if greeting_response_message:
+        st.write(greeting_response_message)
+    else:
+        st.info("الرجاء اختيار تحية من الأزرار أعلاه.")
+
+elif selected_function == "الترجمة":
+    st.header("خدمة الترجمة (عربي ↔ إنجليزي) 🌍")
+    st.markdown("أدخل النص الذي ترغب في ترجمته. سيكتشف النظام اللغة تلقائياً.")
+
+    text_to_translate = st.text_area("أدخل النص هنا:", height=150, key="translation_input_text")
+
+    if st.button("ترجمة / Translate", key="perform_translation_button"):
+        if text_to_translate:
+            with st.spinner("جاري الترجمة..."):
+                # Call the translation logic from the separate module
+                translation_result = perform_translation_logic(text_to_translate)
+                st.success(f"**الترجمة:**\n{translation_result}")
+        else:
+            st.warning("الرجاء إدخال نص للترجمة.")
+
+# --- Optional: Footer ---
 st.markdown("---")
 st.caption("مساعد بسيط تم إنشاؤه باستخدام Streamlit.")
