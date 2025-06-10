@@ -12,9 +12,9 @@ def get_google_translator_instance(source,target):
 def is_arabic(text):
     return bool(re.search(r'[\u0600-\u06FF]', text))
 
-def perform_translation_logic(text_to_translate):
+def perform_translation_logic(text):
     # Detect language using the local helper function and use text_to_translate
-    if is_arabic(text_to_translate):
+    if is_arabic(text):
         translator = get_google_translator_instance('ar','en') # Get the cached translator instance
     else:
         translator = get_google_translator_instance('en','ar') # Get the cached translator instance
