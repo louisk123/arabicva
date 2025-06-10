@@ -5,7 +5,8 @@ import genai
 from functools import lru_cache
 
 # Configure Gemini API once
-genai.configure(api_key="AIzaSyAV-v_NVmeoiuRRtJ4R95zLx2TdAJOXUwY")
+GE_TOKEN = os.environ.get("GE_TOKEN")
+genai.configure(api_key=GE_TOKEN)
 gemini_model = genai.GenerativeModel("gemini-2.0-flash")
 
 # Load ChromaDB collection once when module loads
