@@ -16,8 +16,8 @@ def clear_input_fields(exclude_key=None):
         'translation_input_text',
         'sentiment_input_text',
         'dialect_input_text',
-        'summarization_input_text,
-        "lebanon_qa_input_text";
+        'summarization_input_text',
+        'lebanon_qa_input_text';
     ]
     for key in input_keys_to_clear:
         if key != exclude_key and key in st.session_state:
@@ -39,11 +39,11 @@ if 'current_mode' not in st.session_state:
     st.session_state.current_mode = None
 
 # Create main buttons for mode selection
-col_main5, col_main1, col_main2, col_main3, col_main4 = st.columns(45
+col_main5, col_main1, col_main2, col_main3, col_main4 = st.columns(5)
 
                                                                    
-with col_maint:
-    if st.button("وضع الترجمة 🌍", key="mode_lebanon_qa_button"):
+with col_main5:
+    if st.button("اسأل عن لبنان 🇱🇧", key="mode_lebanon_qa_button"):
         st.session_state.current_mode = "لبنان"
         clear_input_fields(exclude_key='lebanon_qa_input_text')
 with col_main1:
@@ -148,7 +148,7 @@ elif st.session_state.current_mode == "لبنان":
     st.header("اسأل عن لبنان 🇱🇧")
     st.markdown("اكتب سؤالك هنا، وسأجيب عليه بناءً على قاعدة البيانات الخاصة بلبنان.")
 
-    question_text = st.text_area("سؤالك:", height=150, key="lebanon_qa_input")
+    question_text = st.text_area("سؤالك:", height=150, key="lebanon_qa_input_text")
 
     if st.button("اسأل", key="ask_lebanon_button"):
         if question_text and len(question_text.strip()) > 5:
