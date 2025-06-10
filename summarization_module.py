@@ -4,14 +4,16 @@ from arabert.preprocess import ArabertPreprocessor
 import torch
 import os
 
-model_name = "malmarjeh/t5-arabic-text-summarization"
-preprocessor = ArabertPreprocessor(model_name="aubmindlab/bert-base-arabertv02")  # use a valid AraBERT model for preprocessing
+# Get the Hugging Face token from environment variables first
 hf_token = os.environ.get("HF_TOKEN")
 
+model_name = "malmarjeh/t5-arabic-text-summarization"
+preprocessor = ArabertPreprocessor(model_name="aubmindlab/bert-base-arabertv02")  # use a valid AraBERT model for preprocessing
+
+# Now use hf_token after it's defined
 tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_name, token=hf_token)
 summarizer = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
-
 
 def summarize_text(text, max_new_tokens=150, min_length=30):
     # Preprocess text with Arabert
@@ -30,10 +32,10 @@ def summarize_text(text, max_new_tokens=150, min_length=30):
 
     return result
 
-# Remove fixed_max_new_tokens and fixed_min_length from function signature
 def perform_summarization_logic(text):
     try:
         summary_result = summarize_text(text)
         return summary_result
     except Exception as e:
-        return f"خطأ أثناء تلخيص النص: {e}"
+        st.error(f"حدث خطأ أثناء تلخيص النص: {str(e)}")
+        return None
