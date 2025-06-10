@@ -51,8 +51,14 @@ preprocessor, summarizer_pipeline, tokenizer = load_summarization_model()
 
 # Remove fixed_max_new_tokens and fixed_min_length from function signature
 def perform_summarization_logic(text):
-    if preprocessor is None or summarizer_pipeline is None or tokenizer is None:
-        return "خطأ: نموذج التلخيص غير محمل."
+    if preprocessor is None:
+        return "preprocessor error."
+
+    if summarizer_pipeline is None:
+        return "summarizer_pipeline error."
+        
+    if tokenizer is None:
+        return "tokenizer error."
 
     try:
         processed_text = preprocessor.preprocess(text)
