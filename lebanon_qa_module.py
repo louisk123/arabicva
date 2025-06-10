@@ -61,7 +61,7 @@ def answer_question(question, context):
         return "حدث خطأ في توليد الإجابة."
 
 # Helper function to get answer directly from question:
-def get_answer_from_question(question, top_k=5):
+def answer_qa_lebanon(question, top_k=5):
     retrieved_chunks = retrieve(question, collection, top_k=top_k)
     context = "\n".join(retrieved_chunks)
     answer = answer_question(question, context)
