@@ -10,3 +10,4 @@ chromadb
 langchain
 google-generativeai
 arabert
+sentencepiece
