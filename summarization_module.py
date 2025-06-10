@@ -32,12 +32,9 @@ def load_summarization_model():
 
 preprocessor, summarizer_pipeline, tokenizer = load_summarization_model()
 
-def perform_summarization_logic(text):
+def perform_summarization_logic(text,fixed_max_new_tokens=150,fixed_min_length = 30):
     if preprocessor is None or summarizer_pipeline is None or tokenizer is None:
         return "خطأ: نموذج التلخيص غير محمل."
-
-    fixed_max_new_tokens = 150
-    fixed_min_length = 30
 
     try:
         processed_text = preprocessor.preprocess(text)
