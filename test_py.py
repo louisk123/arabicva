@@ -51,7 +51,7 @@ if st.session_state.current_mode == "الترجمة":
         if text_to_translate:
             with st.spinner("جاري الترجمة..."):
                 translation_result = perform_translation_logic(text_to_translate)
-                st.success(f"**الترجمة:**\n{translation_result}")
+                st.success(f"**:الترجمة**\n\n{translation_result}")
         else:
             st.warning("الرجاء إدخال نص للترجمة.")
 
@@ -66,7 +66,7 @@ elif st.session_state.current_mode == "المشاعر":
             with st.spinner("جاري تحليل المشاعر..."):
                 # Call the sentiment analysis logic from the separate module
                 sentiment_label_display = perform_sentiment_analysis_logic(sentiment_input_text)
-                st.success(f"**المشاعر المتوقعة:** {sentiment_label_display}")
+                st.success(f"**:المشاعر المتوقعة**\n\n{sentiment_label_display}")
         else:
             st.warning("الرجاء إدخال نص لتحليل المشاعر.")
 
