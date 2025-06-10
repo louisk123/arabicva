@@ -17,7 +17,7 @@ def load_summarization_model():
 
     try:
         preprocessor = ArabertPreprocessor(model_name=arabert_preprocessor_model_name)
-        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, token=hf_token)
+        tokenizer = T5Tokenizer.from_pretrained(model_name, token=hf_token)
         model = AutoModelForSeq2SeqLM.from_pretrained(model_name, token=hf_token)
 
         device = 0 if torch.cuda.is_available() else -1
