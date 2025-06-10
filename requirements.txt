@@ -1,6 +1,9 @@
 streamlit
 deep-translator
 sentence-transformers
+langdetect
+transformers
+torch
 pymupdf
 chromadb
 langchain
