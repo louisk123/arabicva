@@ -122,14 +122,12 @@ elif st.session_state.current_mode == "التلخيص":
             default_max_new_tokens = 150
             default_min_length = 30
 
-            if len(summarization_input_text.split()) < default_min_length: # Still good to have a basic check
+            if len(summarization_input_text.split()) < default_min_length: 
                 st.warning(f"النص قصير جداً للتلخيص. يجب أن يحتوي على الأقل على {default_min_length} كلمة.")
             else:
                 with st.spinner("جاري تلخيص النص..."):
                     summary_result = perform_summarization_logic(
-                        summarization_input_text,
-                        max_new_tokens=default_max_new_tokens,
-                        min_length=default_min_length
+                        summarization_input_text
                     )
                     if isinstance(summary_result, str) and "خطأ" in summary_result:
                         st.error(summary_result)
