@@ -3,7 +3,7 @@ import streamlit as st
 from translation_module import perform_translation_logic
 from sentiment_module import perform_sentiment_analysis_logic
 from dialect_module import perform_dialect_detection_logic
-from summarization_module import perform_summarization_logic # New import for summarization
+from summarization_module import perform_summarization_logic
 
 # Place this function at the very top, before st.set_page_config
 def clear_input_fields(exclude_key=None):
@@ -14,12 +14,11 @@ def clear_input_fields(exclude_key=None):
         'translation_input_text',
         'sentiment_input_text',
         'dialect_input_text',
-        'summarization_input_text' # Add new summarization input key
+        'summarization_input_text'
     ]
     for key in input_keys_to_clear:
         if key != exclude_key and key in st.session_state:
             st.session_state[key] = ""
-
 
 # --- 1. Set Page Configuration ---
 st.set_page_config(
@@ -37,7 +36,7 @@ if 'current_mode' not in st.session_state:
     st.session_state.current_mode = None
 
 # Create main buttons for mode selection
-col_main1, col_main2, col_main3, col_main4 = st.columns(4) # Added a 4th column
+col_main1, col_main2, col_main3, col_main4 = st.columns(4)
 
 with col_main1:
     if st.button("وضع الترجمة 🌍", key="mode_translation_button"):
@@ -54,11 +53,10 @@ with col_main3:
         st.session_state.current_mode = "اللهجة"
         clear_input_fields(exclude_key='dialect_input_text')
 
-with col_main4: # New button for summarization
+with col_main4:
     if st.button("تلخيص النص 📝", key="mode_summarization_button"):
         st.session_state.current_mode = "التلخيص"
         clear_input_fields(exclude_key='summarization_input_text')
-
 
 st.markdown("---") # Separator line
 
@@ -94,7 +92,7 @@ elif st.session_state.current_mode == "المشاعر":
 
 elif st.session_state.current_mode == "اللهجة":
     st.header("اكتشاف اللهجة العربية 🗣️")
-    st.markdown("أدخل جملة عربية لاكتشاف لهجتها.")
+    st.markdown("أدخل جملة عربية لاكتشاف لهجتها. يرجى ملاحظة أن العربية الفصحى الحديثة (MSA) قد تُصنف ضمن إحدى اللهجات الإقليمية، وقد تكون دقة الكشف أقل في هذه الحالة.")
 
     dialect_input_text = st.text_area("أدخل الجملة هنا:", height=150, key="dialect_input_text")
 
@@ -109,30 +107,29 @@ elif st.session_state.current_mode == "اللهجة":
         else:
             st.warning("الرجاء إدخال نص لاكتشاف اللهجة.")
 
-elif st.session_state.current_mode == "التلخيص": # New mode for summarization
+elif st.session_state.current_mode == "التلخيص":
     st.header("خدمة تلخيص النصوص العربية 📝")
     st.markdown("أدخل نصًا عربيًا طويلاً للحصول على ملخص له.")
 
     summarization_input_text = st.text_area("أدخل النص هنا:", height=200, key="summarization_input_text")
 
-    # Optional parameters for summarization
-    col_sum_params1, col_sum_params2 = st.columns(2)
-    with col_sum_params1:
-        max_tokens = st.slider("الحد الأقصى للكلمات في الملخص:", min_value=50, max_value=500, value=150, step=10)
-    with col_sum_params2:
-        min_tokens = st.slider("الحد الأدنى للكلمات في الملخص:", min_value=10, max_value=max_tokens, value=30, step=5)
-
+    # Removed the sliders for max_tokens and min_tokens
 
     if st.button("تلخيص النص", key="perform_summarization_button_inner"):
         if summarization_input_text:
-            if len(summarization_input_text.split()) < min_tokens:
-                st.warning(f"النص قصير جداً للتلخيص. يجب أن يحتوي على الأقل على {min_tokens} كلمة.")
+            # Use default or fixed values for max_new_tokens and min_length
+            # You can adjust these values directly here or keep them as constants in summarization_module
+            default_max_new_tokens = 150
+            default_min_length = 30
+
+            if len(summarization_input_text.split()) < default_min_length: # Still good to have a basic check
+                st.warning(f"النص قصير جداً للتلخيص. يجب أن يحتوي على الأقل على {default_min_length} كلمة.")
             else:
                 with st.spinner("جاري تلخيص النص..."):
                     summary_result = perform_summarization_logic(
                         summarization_input_text,
-                        max_new_tokens=max_tokens,
-                        min_length=min_tokens
+                        max_new_tokens=default_max_new_tokens,
+                        min_length=default_min_length
                     )
                     if isinstance(summary_result, str) and "خطأ" in summary_result:
                         st.error(summary_result)
