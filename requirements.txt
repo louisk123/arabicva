@@ -4,7 +4,7 @@ sentence-transformers
 langdetect
 peft
 pymupdf
-chromadb
+chromadb[all]
 langchain
 google-generativeai
 transformers
