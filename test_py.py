@@ -98,7 +98,7 @@ elif st.session_state.current_mode == "اللهجة":
     if st.button("اكتشاف اللهجة", key="perform_dialect_button_inner"):
         if dialect_input_text:
             with st.spinner("جاري اكتشاف اللهجة..."):
-                dialect, confidence = perform_dialect_detection_logic(dialect_input_text)
+                dialect = perform_dialect_detection_logic(dialect_input_text)
                 if "Error" in dialect: # Check for specific error message from the dialect module
                     st.error(dialect)
                 else:
