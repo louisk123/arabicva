@@ -3,7 +3,7 @@ deep-translator
 sentence-transformers
 langdetect
 transformers
-peft==0.8.0
+peft
 torch
 pymupdf
 sentencepiece
