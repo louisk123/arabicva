@@ -9,7 +9,7 @@ def get_google_translator_instance(source,target):
     return GoogleTranslator(source,target)
 
 # Helper function to detect if text is Arabic or English
-def is_arabic(text:
+def is_arabic(text):
     return bool(re.search(r'[\u0600-\u06FF]', text))
 
 def perform_translation_logic(text_to_translate):
