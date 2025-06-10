@@ -10,7 +10,6 @@ hf_token = os.environ.get("HF_TOKEN")
 model_name = "malmarjeh/t5-arabic-text-summarization"
 preprocessor = ArabertPreprocessor(model_name="aubmindlab/bert-base-arabertv02")  # use a valid AraBERT model for preprocessing
 
-# Now use hf_token after it's defined
 tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_name, token=hf_token)
 summarizer = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
