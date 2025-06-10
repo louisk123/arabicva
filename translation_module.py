@@ -8,27 +8,23 @@ from deep_translator import GoogleTranslator
 # using @st.cache_resource, so they only load once.
 
 @st.cache_resource
-def get_google_translator_instance():
-    return GoogleTranslator()
+def get_google_translator_instance(source,target):
+    return GoogleTranslator(source,target)
 
-# Helper function for Arabic language detection
-def _is_arabic(text: str) -> bool:
-    #Checks if the given text contains Arabic characters.
+# Fucntion to detetc is text is Arabic or English
+def _is_arabic(text):
     return bool(re.search(r'[\u0600-\u06FF]', text))
 
-def perform_translation_logic(text_to_translate: str) -> str:
-    """
-    Performs translation of the given text, detecting source language automatically.
-    """
-    translator = get_google_translator_instance() # Get the cached translator instance
-
-    # Determine source and target language
-    source_lang = 'ar' if _is_arabic(text_to_translate) else 'en'
-    target_lang = 'en' if source_lang == 'ar' else 'ar'
+def perform_translation_logic(text_to_translate):
+    
+    # Detect language
+    if is_arabic(question):
+       translator = get_google_translator_instance(source='ar', target='en')
+     else:
+       translator = get_google_translator_instance(source='en', target='ar')
 
     try:
-        # Perform translation using the cached translator instance
-        translation_result = translator.translate(text_to_translate, source=source_lang, target=target_lang)
+        translation_result = translation = translator.translate(question)
         return translation_result
     except Exception as e:
         return f"❌ حدث خطأ أثناء الترجمة: {e}"
