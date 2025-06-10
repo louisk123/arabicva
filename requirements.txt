@@ -6,7 +6,6 @@ transformers
 peft
 torch
 pymupdf
-sentencepiece
 chromadb
 langchain
 google-generativeai
