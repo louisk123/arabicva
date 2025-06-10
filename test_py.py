@@ -69,7 +69,6 @@ elif st.session_state.current_mode == "الترجمة":
     st.header("خدمة الترجمة (عربي ↔ إنجليزي) 🌍")
     st.markdown("أدخل النص الذي ترغب في ترجمته. سيكتشف النظام اللغة تلقائياً.")
 
-    # Use a key to persist text area input across reruns
     text_to_translate = st.text_area("أدخل النص هنا:", height=150, key="translation_input_text")
 
     if st.button("ترجمة / Translate", key="perform_translation_button"):
