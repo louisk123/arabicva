@@ -6,6 +6,21 @@ from translation_module import perform_translation_logic
 from sentiment_module import perform_sentiment_analysis_logic
 from dialect_module import perform_dialect_detection_logic
 
+
+def clear_input_fields(exclude_key=None):
+    """
+    Clears all input-related session state.
+    """
+    input_keys_to_clear = [
+        'translation_input_text',
+        'sentiment_input_text',
+        'dialect_input_text'
+    ]
+    for key in input_keys_to_clear:
+        if key != exclude_key and key in st.session_state:
+            st.session_state[key] = ""
+
+
 # --- 1. Set Page Configuration ---
 st.set_page_config(
     page_title="مساعد متعدد الوظائف", # Updated page title
@@ -25,18 +40,6 @@ if 'current_mode' not in st.session_state:
 col_main1, col_main2 ,col_main3 = st.columns(3)
 # Place this function at the top of your streamlit_app.py, perhaps after st.set_page_config
 
-def clear_input_fields(exclude_key=None):
-    """
-    Clears all input-related session state.
-    """
-    input_keys_to_clear = [
-        'translation_input_text',
-        'sentiment_input_text',
-        'dialect_input_text'
-    ]
-    for key in input_keys_to_clear:
-        if key != exclude_key and key in st.session_state:
-            st.session_state[key] = ""
 
 
 with col_main1:
