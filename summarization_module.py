@@ -6,11 +6,12 @@ import os
 
 model_name = "malmarjeh/t5-arabic-text-summarization"
 preprocessor = ArabertPreprocessor(model_name="aubmindlab/bert-base-arabertv02")  # use a valid AraBERT model for preprocessing
+hf_token = os.environ.get("HF_TOKEN")
 
 tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_name, token=hf_token)
 summarizer = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
-hf_token = os.environ.get("HF_TOKEN")
+
 
 def summarize_text(text, max_new_tokens=150, min_length=30):
     # Preprocess text with Arabert
