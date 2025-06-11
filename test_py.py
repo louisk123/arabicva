@@ -14,7 +14,7 @@ from translation_module import perform_translation_logic
 from sentiment_module import perform_sentiment_analysis_logic
 from dialect_module import perform_dialect_detection_logic
 from summarization_module import perform_summarization_logic
-from lebanon_qa_module import answer_qa_lebanon,retrieve,collection
+#from lebanon_qa_module import answer_qa_lebanon,retrieve,collection
 import sys
 
 
@@ -152,7 +152,8 @@ elif st.session_state.current_mode == "التلخيص":
 elif st.session_state.current_mode == "لبنان":
     st.header("اسأل عن لبنان 🇱🇧")
     st.markdown("اكتب سؤالك هنا، وسأجيب عليه بناءً على قاعدة البيانات الخاصة بلبنان.")
-
+    st.warning("من فضلك أدخل سؤالًا واضحًا.")
+''''
     question_text = st.text_area("سؤالك:", height=150, key="lebanon_qa_input_text")
 
     if st.button("اسأل", key="ask_lebanon_button"):
@@ -165,7 +166,7 @@ elif st.session_state.current_mode == "لبنان":
                 st.success(answer)
         else:
             st.warning("من فضلك أدخل سؤالًا واضحًا.")
-
+''''
 else:
     st.info("الرجاء النقر على أحد الأزرار الرئيسية أعلاه للبدء.")
 
