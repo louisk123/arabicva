@@ -153,20 +153,7 @@ elif st.session_state.current_mode == "لبنان":
     st.header("اسأل عن لبنان 🇱🇧")
     st.markdown("اكتب سؤالك هنا، وسأجيب عليه بناءً على قاعدة البيانات الخاصة بلبنان.")
     #st.warning("من فضلك أدخل سؤالًا واضحًا.")
-"""
-    question_text = st.text_area("سؤالك:", height=150, key="lebanon_qa_input_text")
 
-    if st.button("اسأل", key="ask_lebanon_button"):
-        if question_text and len(question_text.strip()) > 5:
-            with st.spinner("جاري البحث..."):
-                retrieved_chunks = retrieve(question_text, collection)
-                context = "\n".join(retrieved_chunks)
-                answer = answer_qa_lebanon(question_text, context)
-                st.markdown("### الإجابة:")
-                st.success(answer)
-        else:
-            st.warning("من فضلك أدخل سؤالًا واضحًا.")
-"""
 else:
     st.info("الرجاء النقر على أحد الأزرار الرئيسية أعلاه للبدء.")
 
