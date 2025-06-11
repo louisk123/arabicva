@@ -1,11 +1,10 @@
-
 import streamlit as st
 import requests
 import os
 
 HF_TOKEN = os.environ.get("HF_TOKEN")  # Load token from environment
 
-API_URL = "https://api-inference.huggingface.co/models/csebuetnlp/mT5_multilingual_XLSum"
+API_URL = "https://api-inference.huggingface.co/models/akhooli/arabic-t5-base"
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"}
 
 def perform_summarization_logic(text):
@@ -17,4 +16,3 @@ def perform_summarization_logic(text):
         return response.json()[0]["summary_text"]
     except:
         return "❌ تعذر استخراج التلخيص من الاستجابة."
-
