@@ -2,6 +2,7 @@ import sys
 __import__('pysqlite3')
 sys.modules['sqlite3'] = sys.modules['pysqlite3']
 
+import os
 import zipfile
 import chromadb
 from sentence_transformers import SentenceTransformer
