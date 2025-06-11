@@ -11,4 +11,3 @@ google-generativeai
 transformers
 torch
 arabert
-rag_module
