@@ -1,3 +1,5 @@
+
+
 import sys
 
 __import__('pysqlite3')
@@ -68,7 +70,7 @@ def get_chromadb_collection_instance():
         st.error(f"خطأ في تحميل مجموعة ChromaDB 'arabic_pdf_chunks': {e}. وظيفة RAG معطلة.")
         return None
 
-# Initialize the ChromaDB collection (cached)
+# Initialize the ChromaDB collection (cached) and make it publicly available
 collection = get_chromadb_collection_instance()
 
 
@@ -93,7 +95,7 @@ def embed_chunks(text: str, model_name: str = 'sentence-transformers/paraphrase-
     return embeddings[0].tolist() # Return as list for ChromaDB query_embeddings
 
 
-# --- Retrieval Function ---
+# --- Retrieval Function (Publicly available as 'retrieve') ---
 def retrieve(query: str, collection_obj: chromadb.api.models.Collection.Collection, top_k: int = 5) -> list[str]:
     """
     Retrieves top_k most relevant chunks from ChromaDB given a query.
@@ -112,13 +114,10 @@ def retrieve(query: str, collection_obj: chromadb.api.models.Collection.Collecti
     return retrieved_chunks
 
 
-# --- Answer Generation Function ---
+# --- Answer Generation Function (Publicly available as 'answer_question') ---
 @lru_cache(maxsize=64) # Cache generated answers to avoid repeated API calls on same inputs
 def answer_question(question: str, context: str) -> str:
-    """
-    Uses Gemini to generate an answer based on the provided context and question.
-    This function's name is kept as 'answer_question' as per your original snippet.
-    """
+
     if gemini_model is None: # Defensive check if Gemini config failed
         return "نموذج Gemini غير مهيأ. لا يمكن توليد الإجابة."
 
@@ -132,28 +131,6 @@ def answer_question(question: str, context: str) -> str:
         return "حدث خطأ في توليد الإجابة."
 
 
-# --- Main Lebanon QA Function (Public Interface) ---
-def answer_qa_lebanon(question: str, top_k: int = 5) -> str:
-    """
-    Main logic for RAG-based Question Answering about Lebanon.
-    Retrieves relevant context and uses an LLM to generate an answer.
-    This function's name is kept as 'answer_qa_lebanon' as per your original snippet.
-    """
-    # Check if the ChromaDB collection was successfully loaded
-    if collection is None:
-        return "خدمة الاستعلام غير متاحة: قاعدة بيانات المعرفة لم يتم تحميلها بشكل صحيح."
-
-    # Retrieve chunks based on the question using the 'retrieve' function
-    retrieved_chunks = retrieve(question, collection, top_k=top_k)
-    
-    # If no relevant chunks are found, inform the user
-    if not retrieved_chunks:
-        return "لم يتم العثور على معلومات ذات صلة بسؤالك في قاعدة البيانات المتاحة."
-        
-    # Combine retrieved chunks into a single context string
-    context = "\n".join(retrieved_chunks)
-    
-    # Generate the answer using Gemini based on the context and question
-    answer = answer_question(question, context)
-    
+def answer_qa_lebanon(question: str, context: str) -> str:
+    answer = answer_question(question, context)    
     return answer
