@@ -1,4 +1,3 @@
-
 import sys
 
 __import__('pysqlite3')
@@ -10,12 +9,13 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 import google.generativeai as genai
 from functools import lru_cache
-import streamlit as st 
-import time 
+import streamlit as st # Crucial for @st.cache_resource
+import time # For time.sleep() to respect API rate limits
+
 
 # --- Gemini API Configuration (for RAG's answer generation) ---
 @st.cache_resource
-def get_gemini_rag_model():
+def get_gemini_model_instance():
     """
     Configures and caches the Gemini Generative Model for RAG.
     Loads API key from the environment variable 'GE_TOKEN'.
@@ -32,13 +32,13 @@ def get_gemini_rag_model():
         st.error(f"خطأ في تهيئة نموذج Gemini: {e}")
         st.stop()
         
-# Call the cached function to get the model instance
-_gemini_model = get_gemini_rag_model()
+# Initialize the Gemini model instance (cached)
+gemini_model = get_gemini_model_instance()
 
 
 # --- ChromaDB Collection Loading ---
 @st.cache_resource
-def get_chromadb_collection():
+def get_chromadb_collection_instance():
     """
     Extracts and loads the ChromaDB collection.
     Handles zip extraction and client initialization.
@@ -68,40 +68,41 @@ def get_chromadb_collection():
         st.error(f"خطأ في تحميل مجموعة ChromaDB 'arabic_pdf_chunks': {e}. وظيفة RAG معطلة.")
         return None
 
-# Call the cached function to get the collection instance
-_chroma_collection = get_chromadb_collection()
+# Initialize the ChromaDB collection (cached)
+collection = get_chromadb_collection_instance()
 
 
-# --- Embedding Model and Caching (for retrieving) ---
+# --- SentenceTransformer Embedding Model ---
 @st.cache_resource
-def get_embedding_model_for_rag(model_name: str = 'sentence-transformers/paraphrase-multilingual-mpnet-base-v2'):
+def get_embedding_model_instance(model_name: str = 'sentence-transformers/paraphrase-multilingual-mpnet-base-v2'):
     """
     Loads and caches the SentenceTransformer model for generating embeddings.
     """
     return SentenceTransformer(model_name)
 
-# Use lru_cache for specific function calls if needed, but the model itself is cached by st.cache_resource
+# Cache embeddings of queries (using lru_cache for quick lookups)
 @lru_cache(maxsize=128)
-def embed_query_text(text: str) -> list[float]: # Return type changed to list[float] as .tolist() is used later
+def embed_chunks(text: str, model_name: str = 'sentence-transformers/paraphrase-multilingual-mpnet-base-v2') -> list[float]:
     """
     Encodes a single query string into a vector embedding.
     Caches results to speed up repeated queries.
+    This function's name is kept as 'embed_chunks' as per your original snippet.
     """
-    model = get_embedding_model_for_rag() # Get the cached model instance
+    model = get_embedding_model_instance(model_name)
     embeddings = model.encode([text]) # Encode expects a list
     return embeddings[0].tolist() # Return as list for ChromaDB query_embeddings
 
 
-# --- RAG Core Functions (internal to this module) ---
-def _retrieve_chunks_internal(query: str, collection_obj: chromadb.api.models.Collection.Collection, top_k: int = 5) -> list[str]:
+# --- Retrieval Function ---
+def retrieve(query: str, collection_obj: chromadb.api.models.Collection.Collection, top_k: int = 5) -> list[str]:
     """
     Retrieves top_k most relevant chunks from ChromaDB given a query.
-    (Private helper function)
+    This function's name is kept as 'retrieve' as per your original snippet.
     """
     if collection_obj is None: # Defensive check if collection failed to load
         return []
     
-    query_emb = embed_query_text(query)
+    query_emb = embed_chunks(query) # Call the cached embedding function
     results = collection_obj.query(
         query_embeddings=[query_emb], # query_emb is already a list from .tolist()
         n_results=top_k
@@ -110,35 +111,40 @@ def _retrieve_chunks_internal(query: str, collection_obj: chromadb.api.models.Co
     retrieved_chunks = results.get('documents', [[]])[0] if results and 'documents' in results else []
     return retrieved_chunks
 
+
+# --- Answer Generation Function ---
 @lru_cache(maxsize=64) # Cache generated answers to avoid repeated API calls on same inputs
-def _generate_answer_from_context_internal(question: str, context: str) -> str:
+def answer_question(question: str, context: str) -> str:
     """
     Uses Gemini to generate an answer based on the provided context and question.
-    (Private helper function)
+    This function's name is kept as 'answer_question' as per your original snippet.
     """
-    if _gemini_model is None: # Defensive check if Gemini config failed
+    if gemini_model is None: # Defensive check if Gemini config failed
         return "نموذج Gemini غير مهيأ. لا يمكن توليد الإجابة."
 
     prompt = f"السياق: {context}\nالسؤال: {question}\nالإجابة:"
     try:
-        response = _gemini_model.generate_content(prompt)
-        time.sleep(4) # Enforce delay for Gemini API call
+        response = gemini_model.generate_content(prompt)
+        time.sleep(4) # Enforce delay for Gemini API call (essential for rate limits)
         return response.text.strip()
     except Exception as e:
         print(f"Error calling Gemini API for question: '{question[:50]}...'. Error: {e}")
         return "حدث خطأ في توليد الإجابة."
 
-def answer_qa_logic(question: str, top_k: int = 5) -> str:
+
+# --- Main Lebanon QA Function (Public Interface) ---
+def answer_qa_lebanon(question: str, top_k: int = 5) -> str:
     """
-    Main logic for RAG-based Question Answering.
+    Main logic for RAG-based Question Answering about Lebanon.
     Retrieves relevant context and uses an LLM to generate an answer.
+    This function's name is kept as 'answer_qa_lebanon' as per your original snippet.
     """
     # Check if the ChromaDB collection was successfully loaded
-    if _chroma_collection is None:
+    if collection is None:
         return "خدمة الاستعلام غير متاحة: قاعدة بيانات المعرفة لم يتم تحميلها بشكل صحيح."
 
-    # Retrieve chunks based on the question
-    retrieved_chunks = _retrieve_chunks_internal(question, _chroma_collection, top_k=top_k)
+    # Retrieve chunks based on the question using the 'retrieve' function
+    retrieved_chunks = retrieve(question, collection, top_k=top_k)
     
     # If no relevant chunks are found, inform the user
     if not retrieved_chunks:
@@ -148,7 +154,6 @@ def answer_qa_logic(question: str, top_k: int = 5) -> str:
     context = "\n".join(retrieved_chunks)
     
     # Generate the answer using Gemini based on the context and question
-    answer = _generate_answer_from_context_internal(question, context)
+    answer = answer_question(question, context)
     
     return answer
-
