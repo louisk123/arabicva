@@ -4,7 +4,7 @@ import os
 
 HF_TOKEN = os.environ.get("HF_TOKEN")  # Load token from environment
 
-API_URL = "https://api-inference.huggingface.co/models/akhooli/arabic-t5-base"
+API_URL = "https://api-inference.huggingface.co/models/csebuetnlp/mT5_multilingual_XLSum"
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"}
 
 def perform_summarization_logic(text):
