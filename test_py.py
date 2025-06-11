@@ -1,5 +1,15 @@
-# Import functionalities from separate modules
 import streamlit as st
+# --- 1. Set Page Configuration ---
+st.set_page_config(
+    page_title="مساعد متعدد الوظائف",
+    page_icon="🤖",
+    layout="centered"
+)
+
+
+
+# Import functionalities from separate modules
+
 from translation_module import perform_translation_logic
 from sentiment_module import perform_sentiment_analysis_logic
 from dialect_module import perform_dialect_detection_logic
@@ -24,13 +34,6 @@ def clear_input_fields(exclude_key=None):
     for key in input_keys_to_clear:
         if key != exclude_key and key in st.session_state:
             st.session_state[key] = ""
-
-# --- 1. Set Page Configuration ---
-st.set_page_config(
-    page_title="مساعد متعدد الوظائف",
-    page_icon="🤖",
-    layout="centered"
-)
 
 # --- 2. Display App Title and Main Mode Selection Buttons ---
 st.title("مساعد اللغة العربية 🤖")
