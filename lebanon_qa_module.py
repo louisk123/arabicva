@@ -5,7 +5,7 @@ sys.modules['sqlite3'] = sys.modules['pysqlite3']
 import zipfile
 import chromadb
 from sentence_transformers import SentenceTransformer
-import genai
+import google.generativeai as genai
 from functools import lru_cache
 
 # Configure Gemini API once
