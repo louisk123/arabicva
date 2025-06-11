@@ -1,11 +1,12 @@
+import sys
+__import__('pysqlite3')
+sys.modules['sqlite3'] = sys.modules['pysqlite3']
+
 import zipfile
 import chromadb
 from sentence_transformers import SentenceTransformer
 import genai
 from functools import lru_cache
-import sys
-__import__('pysqlite3')
-sys.modules['sqlite3'] = sys.modules['pysqlite3']
 
 # Configure Gemini API once
 GE_TOKEN = os.environ.get("GE_TOKEN")
