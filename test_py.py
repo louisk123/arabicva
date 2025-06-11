@@ -152,7 +152,7 @@ elif st.session_state.current_mode == "التلخيص":
 elif st.session_state.current_mode == "لبنان":
     st.header("اسأل عن لبنان 🇱🇧")
     #st.markdown("اكتب سؤالك هنا، وسأجيب عليه بناءً على قاعدة البيانات الخاصة بلبنان.")
-     st.markdown("Ask about Lebanon is not available in here due to heavy load, but you can run it from this file - fully functional:  RAG_Louis Karam.ipynb. Make sure to add the chromadb as well to colab: chromadb_data.zip")
+    st.markdown("Ask about Lebanon is not available in here due to heavy load, but you can run it from this file - fully functional:  RAG_Louis Karam.ipynb. Make sure to add the chromadb as well to colab: chromadb_data.zip")
     #st.warning("من فضلك أدخل سؤالًا واضحًا.")
 
 else:
