@@ -4,8 +4,7 @@ from translation_module import perform_translation_logic
 from sentiment_module import perform_sentiment_analysis_logic
 from dialect_module import perform_dialect_detection_logic
 from summarization_module import perform_summarization_logic
-from lebanon_qa_module import answer_qa_lebanon
-from rag_module import retrieve, answer_question, collection
+from lebanon_qa_module import answer_qa_lebanon,retrieve,collection
 import sys
 
 
